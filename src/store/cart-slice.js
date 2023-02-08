@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { uiActions } from "./ui-slice";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -6,9 +7,16 @@ const cartSlice = createSlice({
     itemsList: [],
     totalQuantity: 0,
     showCart: false,
+    changed: false,
   },
   reducers: {
+    replaceData(state, action) {
+      state.totalQuantity = action.payload.totalQuantity;
+      state.itemsList = action.payload.itemsList;
+    },
+
     addToCart(state, action) {
+      state.changed = true;
       const newItem = action.payload;
 
       //TO check if the item is already availabe
@@ -33,6 +41,7 @@ const cartSlice = createSlice({
     },
 
     removeFromCart(state, action) {
+      state.changed = true;
       const id = action.payload;
 
       const existingItem = state.itemsList.find((item) => item.id === id);
@@ -50,6 +59,8 @@ const cartSlice = createSlice({
     },
   },
 });
+
+// REDUX THUNK IMPLEMENTATION
 
 export const cartActions = cartSlice.actions;
 
